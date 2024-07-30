@@ -5,6 +5,7 @@
 #include "Drivers/rpi_irq.h"
 
 #include "Tasks/ledcontrol.h"
+#include "Tasks/Bench/epic/epic.h"
 
 #define GPIO_PIN_26 26
 #define GPIO_PIN_18 18 
@@ -42,16 +43,18 @@ void task2(void *pParam) {
 int main(void) {
 	rpi_cpu_irq_disable();
 
-	rpi_gpio_sel_fun(47, 1);			// RDY led
+	rpi_gpio_sel_fun(47, 1);			
 	rpi_gpio_sel_fun(35, 1);
 	
 	uint32_t gpio_pin_26 = GPIO_PIN_26;
-    	uint32_t gpio_pin_18 = GPIO_PIN_18;			// RDY led
+    	uint32_t gpio_pin_18 = GPIO_PIN_18;			
 
 	//xTaskCreate(task1, "LED_0", 128, NULL, 0, NULL);
 	//xTaskCreate(task2, "LED_1", 128, NULL, 0, NULL);
 
-	vLEDON(&gpio_pin_18);
+	xTaskCreate(vLEDON, "LEDyellow", 128, &gpio_pin_26, 1, NULL);
+	//xTaskCreate(vLEDON, "LEDred", 128, &gpio_pin_18, 1, NULL);
+	xTaskCreate(epic_main_run, "EPICBench", 1024, NULL, 0, NULL);
 
 	vTaskStartScheduler();
 
