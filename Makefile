@@ -5,6 +5,7 @@ SOURCES = Demo/main.c \
           Demo/Drivers/rpi_gpio.c \
           Demo/Drivers/rpi_irq.c \
           Demo/Tasks/ledcontrol.c \
+          Demo/Tasks/binaryblink.c \
           Demo/Tasks/Bench/epic/epic.c \
           Source/tasks.c \
           Source/list.c \

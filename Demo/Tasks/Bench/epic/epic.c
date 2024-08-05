@@ -1128,10 +1128,10 @@ int epic_return()
 }
 
 
-int epic_main_run( void )
+void epic_main_run( void )
 {
   epic_init();
   epic_main();
   
-  return epic_return();
+ epic_return();
 }
