@@ -7,6 +7,9 @@
 #include "Tasks/ledcontrol.h"
 #include "Tasks/Bench/epic/epic.h"
 
+#include <unistd.h>
+#include <time.h>
+
 #define GPIO_PIN_26 26
 #define GPIO_PIN_18 18 
 
@@ -33,6 +36,30 @@ void task2(void *pParam) {
 	}
 }
 
+uint32_t gpio_pin_26 = GPIO_PIN_26;
+uint32_t gpio_pin_18 = GPIO_PIN_18;	
+
+
+
+void tobinary(){
+    // Assuming a 32-bit integer
+    int bits = sizeof(int) * 8;
+
+    for (int i = bits - 1; i >= 0; i--) {
+        // Check if the ith bit is set
+        int bit = (10 >> i) & 1;
+        if(bit == 0){
+           vLEDON(&gpio_pin_26);
+
+        }
+        else{
+          vLEDON(&gpio_pin_18);
+
+        }
+    }
+
+}
+
 
 /**
  *	This is the systems main entry, some call it a boot thread.
@@ -46,15 +73,16 @@ int main(void) {
 	rpi_gpio_sel_fun(47, 1);			
 	rpi_gpio_sel_fun(35, 1);
 	
-	uint32_t gpio_pin_26 = GPIO_PIN_26;
-    	uint32_t gpio_pin_18 = GPIO_PIN_18;			
-
+		
+	tobinary();
 	//xTaskCreate(task1, "LED_0", 128, NULL, 0, NULL);
 	//xTaskCreate(task2, "LED_1", 128, NULL, 0, NULL);
 
-	xTaskCreate(vLEDON, "LEDyellow", 128, &gpio_pin_26, 1, NULL);
+	//xTaskCreate(vLEDON, "LEDyellow", 128, &gpio_pin_26, 1, NULL);
 	//xTaskCreate(vLEDON, "LEDred", 128, &gpio_pin_18, 1, NULL);
-	xTaskCreate(epic_main_run, "EPICBench", 1024, NULL, 0, NULL);
+	//xTaskCreate(epic_main_run, "EPICBench", 1024, NULL, 0, NULL);
+
+	//xTaskCreate(tobinary, "binary", 1024, NULL, 0, NULL);
 
 	vTaskStartScheduler();
 
